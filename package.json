@@ -35,6 +35,6 @@
     "url": "https://github.com/williamwicks/extensions/issues"
   },
   "dependencies": {
-    "extend": "~1.1.3"
+    "extend": "~1"
   }
 }
