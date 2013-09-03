@@ -1,6 +1,6 @@
 
 //helper to remove the repetitive {value: XXX} cruft
-function extendNonEnumerable(obj, values){
+function define(obj, values){
 	Object.keys(values).forEach(function(key){
 		Object.defineProperty(obj, key, {
 			value: values[key]
@@ -8,12 +8,12 @@ function extendNonEnumerable(obj, values){
 	});
 }
 
-extendNonEnumerable(Object, {
+define(Object, {
 	extend: require("extend"),
-	extendNonEnumerable: extendNonEnumerable
+	define: define
 });
 
-extendNonEnumerable(String.prototype, {
+define(String.prototype, {
 	padStart: function (resultLength,padChar) { if(this.length>=resultLength) return this.valueOf(); return (new Array(resultLength-this.length+1)).join(padChar||' ') + this },
 	padEnd: function (resultLength,padChar) { if(this.length>=resultLength) return this.valueOf(); return this+(new Array(resultLength-this.length+1)).join(padChar||' ') },
 	endsWith: function (A) { return this.substr(this.length - A.length) === A },
@@ -35,7 +35,7 @@ Date.midnightUTC = function(date){
 	var val = date.valueOf();
 	return val - (val % 86400000);
 };
-extendNonEnumerable(Date.prototype, {
+define(Date.prototype, {
 	midnight: function(){ return Date.midnight(this); },
 	midnightUTC: function(){ return Date.midnightUTC(this); },
 	addDays: function(value){
@@ -43,11 +43,11 @@ extendNonEnumerable(Date.prototype, {
 	}
 });
 
-extendNonEnumerable(Number.prototype, {
+define(Number.prototype, {
 	isBetween: function (min,max) { return this >= min && this <= max; }
 });
 
-extendNonEnumerable(Object.prototype, {
+define(Object.prototype, {
 	forEach: function(callback){
 		var obj = this;
 		Object.enumerate(this, callback);
