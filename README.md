@@ -24,12 +24,11 @@ FYI, the module does not exporting anything. It just needs to be `require`'d som
 require("extensions")
 
 ```
-
-## OMG you might get version conflicts!
-Yup there could be. I'll havta deal with it like a big boy.
-
-It's a good incentive to leave the API alone.
-
+<br>
+<br>
+<br>
+<br>
+# String
 ### String.prototype.padStart(length [,padchar])
 ### String.prototype.padEnd(length [,padchar])
 Adds characters to the beginning or end of the `String`.
@@ -42,7 +41,6 @@ var x = "EasyPeezy";
 console.log(x.padStart(x.length+3, '0'));
 //000EasyPeezy
 ```
-# String
 ### String.prototype.endsWith(string)
 ### String.prototype.startsWith(string)
 It does what you think it does.
