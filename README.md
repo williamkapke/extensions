@@ -94,6 +94,17 @@ x.forEach(function(key, value){
 // c	7
 ```
 
+### Object.prototype.map(callback)
+Works like `Array.prototype.map` but for objects.
+```javascript
+var x = {a:9, b:8, c:7};
+var y = x.map(function(key, value){
+	return value+1;
+});
+console.log(y);
+// { a: 10, b: 9, c: 8 }
+```
+
 (un)license
 ===========
 

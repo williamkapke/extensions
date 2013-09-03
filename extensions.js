@@ -48,6 +48,13 @@ define(Number.prototype, {
 });
 
 define(Object.prototype, {
+	map: function(callback){
+		var result = {};
+		this.forEach(function(key, value){
+			result[key] = callback(key, value);
+		});
+		return result;
+	},
 	forEach: function(callback){
 		var obj = this;
 		Object.enumerate(this, callback);
