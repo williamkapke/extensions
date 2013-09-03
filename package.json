@@ -1,0 +1,37 @@
+{
+  "name": "extensions",
+  "version": "42.0.0",
+  "description": "Doin' freaky nasty things to the built in prototypes.",
+  "main": "extensions.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/williamwicks/extensions.git"
+  },
+  "keywords": [
+    "string",
+    "number",
+    "date",
+    "object",
+    "prototype",
+    "startsWith",
+    "endsWith",
+    "midnight",
+    "forEach",
+    "enumerate",
+    "email",
+    "pad",
+    "padStart",
+    "padEnd",
+    "padLeft",
+    "padRight",
+    "remove"
+  ],
+  "author": "William Wicks",
+  "license": "unlicensed",
+  "bugs": {
+    "url": "https://github.com/williamwicks/extensions/issues"
+  }
+}
