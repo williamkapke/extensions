@@ -104,6 +104,16 @@ var y = x.map(function(key, value){
 console.log(y);
 // { a: 10, b: 9, c: 8 }
 ```
+### Object.prototype.filter(callback)
+Works like `Array.prototype.filter` but for objects.
+```javascript
+var x = {a:9, b:8, c:7};
+var y = x.filter(function(key, value){
+	return value===8;
+});
+console.log(y);
+// { b: 8 }
+```
 
 (un)license
 ===========

@@ -48,6 +48,15 @@ define(Number.prototype, {
 });
 
 define(Object.prototype, {
+	filter: function(callback){
+		var result = {};
+		this.forEach(function(key, value){
+			var keep = callback(key, value);
+			if(keep===true)
+				result[key] = value;
+		});
+		return result;
+	},
 	map: function(callback){
 		var result = {};
 		this.forEach(function(key, value){
