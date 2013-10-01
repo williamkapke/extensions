@@ -24,11 +24,7 @@ FYI, the module does not exporting anything. It just needs to be `require`'d som
 require("extensions")
 
 ```
-<br>
-<br>
-<br>
-<br>
-# Caveat
+### Caveat
 Let me be the first to scream from the hilltops:<br>
 **DO NOT USE PROTOTYPE EXTENSIONS A PUBLISHED MODULE!**
 
