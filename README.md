@@ -28,6 +28,20 @@ require("extensions")
 <br>
 <br>
 <br>
+# Caveat
+Let me be the first to scream from the hilltops:<br>
+**DO NOT USE PROTOTYPE EXTENSIONS A PUBLISHED MODULE!**
+
+This library (and others like it) should ONLY be used in YOUR PERSONAL scripts. The 
+problem is that there's no way to version `prototype` augmentations. If you were to 
+force these augmentations on to an entire application- you're shooting yourself in 
+the foot. This is not the only `prototype` augmentation library out there- and there 
+is absolutely no compatibility guarantee of the function names & signatures & behaviors 
+across them.
+<br>
+<br>
+<br>
+<br>
 # String
 ### String.prototype.padStart(length [,padchar])
 ### String.prototype.padEnd(length [,padchar])
