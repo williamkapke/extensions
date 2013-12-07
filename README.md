@@ -26,7 +26,7 @@ require("extensions")
 ```
 ### Caveat
 Let me be the first to scream from the hilltops:<br>
-**DO NOT USE PROTOTYPE EXTENSIONS A PUBLISHED MODULE!**
+**DO NOT USE PROTOTYPE EXTENSIONS IN A PUBLISHED MODULE!**
 
 This library (and others like it) should ONLY be used in YOUR PERSONAL scripts. The 
 problem is that there's no way to version `prototype` augmentations. If you were to 
