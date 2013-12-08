@@ -3,6 +3,7 @@
 function define(obj, values){
 	Object.keys(values).forEach(function(key){
 		Object.defineProperty(obj, key, {
+			writable:true,
 			value: values[key]
 		});
 	});
