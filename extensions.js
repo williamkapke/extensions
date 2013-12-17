@@ -23,7 +23,8 @@ define(String.prototype, {
 	isShorterThan: function (l) { return this.length < l},
 	lengthIsBetween: function (min,max) { return this.length.isBetween(min, max); },
 	isEmail: function isEmail() { return String.isEmail(this.valueOf()); },
-	remove: function (value) { return this.replace(value, ""); }
+	remove: function (value) { return this.replace(value, ""); },
+	in: function (values) { return Array.prototype.some.call(Array.isArray(values)? values : arguments, function(i){ return this.valueOf()===i.toString(); }, this) }
 });
 
 Date.midnight = function(date){

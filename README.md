@@ -70,6 +70,15 @@ This is an alias for:
 var x = "The Quick Brown".replace(value, '');
 ```
 
+### String.prototype.in(array|args)
+Test if the `String` is in the array/arguments.
+```javascript
+var x = "99".in([1,5,33,77,99,32425]);
+//true
+var x = "dog".in("cat", "pig", "horse", "dog", "cow");
+//true
+```
+
 # Number
 ### Number.prototype.isBetween(min,max)
 `min` and `max` are _inclusive_. Just like if you say "Pick a number between 1 and 100."
