@@ -53,6 +53,9 @@ require("extensions")
 As many of the [async](https://github.com/caolan/async) & [lodash](http://lodash.com/)
 functions have been available as possible. For access to the entire frameworks, you can
 use $async and $_ respectively.
+
+For a full list, check out the source:<br>
+https://github.com/williamwicks/extensions/blob/master/extensions.js#L123
 <br>
 <br>
 
