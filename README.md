@@ -1,46 +1,172 @@
 Javascript prototype extensions
 ===============================
 
-Do not open an issue saying that augmenting prototypes is bad. I'm a big boy that
-can ride my bike without training wheels now and I'm going to go have fun.
+The power of [lodash](http://lodash.com/), [async](https://github.com/caolan/async),
+[type-of](https://www.npmjs.org/package/type-of), PLUS a few other useful helpers
+conveniently placed on the prototypes of the built in Javascript Objects.
 
-If something you read 10 years ago has still got you are scared of augmenting the
-`prototype` of the `String`,`Object`,`Number`, and `Date` objects then do not use
-this module.
+To avoid collisions with other prototype augmentations you may have, `extensions` prefixes
+everything with `$`.
+
+```js
+//use async series (https://github.com/caolan/async#seriestasks-callback)
+var log = function(t){ return function()console.log(t) };
+[
+	function(cb){ console.log('one'); cb(); },
+	function(cb){ console.log('two'); cb(); },
+	function(cb){ console.log('three'); cb(); }
+]
+.$series(function(){
+	console.log('done!');
+});
+
+```
+
+>  Do not open an issue saying that augmenting prototypes is bad. I'm a big boy that
+>  can ride my bike without training wheels now and I'm going to go have fun.
+>
+>  If something you read 10 years ago has still got you are scared of augmenting the
+>  `prototype` of the `String`,`Object`,`Number`, and `Date` objects then do not use
+>  this module.
 
 Everything uses `Object.defineProperty` (introduced in ECMAScript 5) with
 `enumerable:false`.
 
 This is NOT a crazy big lib. Seriously- open `extensions.js` and see for yourself.
-
+<br>
+<br>
+<br>
 ```
 npm install extensions
 ```
 
-FYI, the module does not exporting anything. It just needs to be `require`'d somewhere.
+#### FYI...
+This module does not exporting anything. It just needs to be `require`'d somewhere.
 ```javascript
 //app.js
 
 require("extensions")
 
 ```
-### Caveat
-Let me be the first to scream from the hilltops:<br>
-**DO NOT USE PROTOTYPE EXTENSIONS IN A PUBLISHED MODULE!**
 
-This library (and others like it) should ONLY be used in YOUR PERSONAL scripts. The 
-problem is that there's no way to version `prototype` augmentations. If you were to 
-force these augmentations on to an entire application- you're shooting yourself in 
-the foot. This is not the only `prototype` augmentation library out there- and there 
-is absolutely no compatibility guarantee of the function names & signatures & behaviors 
-across them.
+# async & lodash
+As many of the [async](https://github.com/caolan/async) & [lodash](http://lodash.com/)
+functions have been available as possible. For access to the entire frameworks, you can
+use $async and $_ respectively.
 <br>
 <br>
+
+
+
+#Object Extensions
+
+### Object.prototype.$property(name, options, value)
+Helper for `Object.defineProperty` to set a property value with configuration options.
+
+```js
+var x = {}.$property("foo", "ecw", 123);
+console.log(x.foo);
+```
+
+#### options
+A string of flags indicating which options you want enabled. Any options not found in the string are false.
+*w* = writable
+*e* = enumerable
+*c* = configurable
+
+#### value
+The value you want the property set to.
+
+
+### Object.prototype.$getter(name, options, getter)
+Helper for `Object.defineProperty` to create a getter with configuration options.
+
+```js
+var x = {}.$getter("foo", "ec", function(){ return 123; });
+console.log(x.foo);```
+
+#### options
+A string of flags indicating which options you want enabled. Any options not found in the string are false.
+*e* = enumerable
+*c* = configurable
+
+#### getter
+The getter function for the property.
+
+
+
+### $flatten
+Creates a flattened object by using dot notation properties on nested objects.
+
+```js
+console.log({foo:{bar:{baz:123}}}.$flatten);
+// { 'foo.bar.baz': 123 }
+```
+
+
+### Object.prototype.$get(path)
+Gets a nested value from an object using dot notation.
+
+```js
+console.log({foo:{bar:{baz:123}}}.$get('foo.bar.baz'));
+// 123
+```
+
+### Object.$type(obj)
+### Object.prototype.$type(obj)
+See [type-of](https://www.npmjs.org/package/type-of)
+
+
+### Object.prototype.$json
+Shortcut for `JSON.stringify(obj)`
+### Object.prototype.$json2
+Shortcut for `JSON.stringify(obj, null, 2)`
+
+### Object.prototype.$signature
+Although this is on `Object.prototype`, it explicitly only works on an `arguments` Object.
+
+```js
+var fn = function(){ console.log(arguments.$signature) };
+
+var fn = function(){ return arguments.$signature };
+
+console.log( fn(1, true, function(){}) );
+//number,boolean,function
+
+console.log( fn("hello") );
+//string
+
+console.log( fn(/jazz/, new Date) );
+//regexp,date
+```
+
+Use it like this:
+```js
+function(){
+	switch(arguments.$signature){
+		case "number,boolean,function":
+			return foo.apply(this, arguments);
+		case "string":
+			return bar.apply(this, arguments);
+		case "regexp,date":
+			return baz.apply(this, arguments);
+	}
+}
+```
 <br>
 <br>
-# String
-### String.prototype.padStart(length [,padchar])
-### String.prototype.padEnd(length [,padchar])
+
+
+
+
+
+
+
+
+# String Extensions
+
+### String.prototype.$padStart(length [,padchar])
+### String.prototype.$padEnd(length [,padchar])
 Adds characters to the beginning or end of the `String`.
 **length** is the total length you want the resulting string to be.
 
@@ -51,26 +177,26 @@ var x = "EasyPeezy";
 console.log(x.padStart(x.length+3, '0'));
 //000EasyPeezy
 ```
-### String.prototype.endsWith(string)
-### String.prototype.startsWith(string)
+### String.prototype.$endsWith(string)
+### String.prototype.$startsWith(string)
 It does what you think it does.
 
-### String.prototype.isLongerThan(length)
-### String.prototype.isShorterThan(length)
-### String.prototype.lengthIsBetween(min,max)
+### String.prototype.$isLongerThan(length)
+### String.prototype.$isShorterThan(length)
+### String.prototype.$lengthIsBetween(min,max)
 Test the length of the `String`.
 
-### String.isEmail(str)
-### String.prototype.isEmail()
+### String.$isEmail(str)
+### String.prototype.$isEmail()
 Tests if it matches a big long email `RegExp`.
 
-### String.prototype.remove(string|regex)
+### String.prototype.$remove(string|regex)
 This is an alias for:
 ```javascript
 var x = "The Quick Brown".replace(value, '');
 ```
 
-### String.prototype.in(array|args)
+### String.prototype.$in(array|args)
 Test if the `String` is in the array/arguments.
 ```javascript
 var x = "99".in([1,5,33,77,99,32425]);
@@ -79,60 +205,64 @@ var x = "dog".in("cat", "pig", "horse", "dog", "cow");
 //true
 ```
 
-# Number
-### Number.prototype.isBetween(min,max)
-`min` and `max` are _inclusive_. Just like if you say "Pick a number between 1 and 100."
+### String.prototype.$mask
+Converts a comma separated list of property names to a field mask. (Useful for mongo)
+```js
+console.log("foo,bar,baz".$mask)
+// { foo: 1, bar: 1, baz: 1 }
+```
+<br>
+<br>
 
-# Date
-### Date.midnight([date])
+
+
+
+
+#Array Extensions
+
+### Array.prototype.$mask
+Converts an Array of property names to a field mask. (Useful for mongo)
+```js
+console.log(["foo","bar","baz"].$mask)
+// { foo: 1, bar: 1, baz: 1 }
+```
+<br>
+<br>
+
+
+
+
+# Date Extensions
+
+### Date.$midnight([date])
 Returns a new `Date` object that is set to midnight of `date`.
 `date` defaults to `new Date()` if not passed in.
 
-### Date.prototype.midnight()
+### Date.prototype.$midnight()
 Returns a new `Date` object that is set to midnight.
 
-### Date.midnightUTC([date])
-### Date.prototype.midnightUTC()
+### Date.$midnightUTC([date])
+### Date.prototype.$midnightUTC()
 The usual UTC equivelants.
 
-### Date.prototype.addDays(num)
+### Date.$nowISO()
+A shortcut for `(new Date()).toISOString()`
+
+### Date.prototype.$addDays(num)
 Adds `num` days to the date.
+<br>
+<br>
 
 
-#Object
-### Object.enumerate(obj, callback)
-### Object.prototype.forEach(callback)
-Like Array.forEach- but the callback is passed the key & value;
-```javascript
-var x = {a:9, b:8, c:7};
-x.forEach(function(key, value){
-	console.log(key, value);
-});
-// a	9
-// b	8
-// c	7
-```
 
-### Object.prototype.map(callback)
-Works like `Array.prototype.map` but for objects.
-```javascript
-var x = {a:9, b:8, c:7};
-var y = x.map(function(key, value){
-	return value+1;
-});
-console.log(y);
-// { a: 10, b: 9, c: 8 }
-```
-### Object.prototype.filter(callback)
-Works like `Array.prototype.filter` but for objects.
-```javascript
-var x = {a:9, b:8, c:7};
-var y = x.filter(function(key, value){
-	return value===8;
-});
-console.log(y);
-// { b: 8 }
-```
+# Number Extensions
+
+### Number.prototype.$isBetween(min,max)
+`min` and `max` are _inclusive_. Just like if you say "Pick a number between 1 and 100."
+<br>
+<br>
+
+
 
 (un)license
 ===========
