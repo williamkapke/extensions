@@ -98,11 +98,11 @@ The getter function for the property.
 
 
 
-### $flatten
+### $flatten()
 Creates a flattened object by using dot notation properties on nested objects.
 
 ```js
-console.log({foo:{bar:{baz:123}}}.$flatten);
+console.log({foo:{bar:{baz:123}}}.$flatten());
 // { 'foo.bar.baz': 123 }
 ```
 
@@ -208,10 +208,10 @@ var x = "dog".in("cat", "pig", "horse", "dog", "cow");
 //true
 ```
 
-### String.prototype.$mask
+### String.prototype.$mask()
 Converts a comma separated list of property names to a field mask. (Useful for mongo)
 ```js
-console.log("foo,bar,baz".$mask)
+console.log("foo,bar,baz".$mask())
 // { foo: 1, bar: 1, baz: 1 }
 ```
 <br>
@@ -223,10 +223,10 @@ console.log("foo,bar,baz".$mask)
 
 #Array Extensions
 
-### Array.prototype.$mask
+### Array.prototype.$mask()
 Converts an Array of property names to a field mask. (Useful for mongo)
 ```js
-console.log(["foo","bar","baz"].$mask)
+console.log(["foo","bar","baz"].$mask())
 // { foo: 1, bar: 1, baz: 1 }
 ```
 <br>

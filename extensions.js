@@ -34,7 +34,7 @@ Object.prototype.$property("$getter", function(name, options, getter) {
   return this;
 });
 //Example: console.log({foo:{bar:{baz:123}}}.$flatten);
-Object.prototype.$getter("$flatten", function() {
+Object.prototype.$property("$flatten", function() {
   var out = {};
 
   function r(path, obj) {
@@ -71,8 +71,8 @@ String.prototype.$property("$lengthIsBetween", function (min,max) { return this.
 String.prototype.$property("$isEmail", function isEmail() { return String.isEmail(this.valueOf()); });
 String.prototype.$property("$remove", function (value) { return this.replace(value, ""); });
 String.prototype.$property("$in", function (values) { return Array.prototype.some.call(Array.isArray(values)? values : arguments, function(i){ return this.valueOf()===i.toString(); }, this) });
-String.prototype.$getter("$mask", function () { return this.length && JSON.parse('{"'+this.valueOf().replace(/,/g,'":1,"')+'":1}') || {}; });
-Array.prototype.$getter("$mask", function () { var out={}; this.forEach(function(k){out[k]=1}); return out; });
+String.prototype.$property("$mask", function () { return this.length && JSON.parse('{"'+this.valueOf().replace(/,/g,'":1,"')+'":1}') || {}; });
+Array.prototype.$property("$mask", function () { var out={}; this.forEach(function(k){out[k]=1}); return out; });
 
 String.$isEmail = function(str) {
   //I have no idea who deserves the credit for this RegExp.
@@ -256,3 +256,4 @@ asyncify(Object.prototype, "auto");
       return _[name].apply(_, args);
     });
   });
+
