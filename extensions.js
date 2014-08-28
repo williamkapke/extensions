@@ -258,4 +258,3 @@ asyncify(Object.prototype, "auto");
     });
   });
 
-console.log({foo:{bar:{baz:123}}}.$flatten('/'));
