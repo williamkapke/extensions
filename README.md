@@ -98,8 +98,10 @@ The getter function for the property.
 
 
 
-### $flatten()
-Creates a flattened object by using dot notation properties on nested objects.
+### $flatten([delimiter='.'])
+Creates a flattened object by using dot notation (by default) properties on nested objects.
+
+Specify the `delimiter` to use something other than a '.'
 
 ```js
 console.log({foo:{bar:{baz:123}}}.$flatten());

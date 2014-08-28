@@ -34,17 +34,18 @@ Object.prototype.$property("$getter", function(name, options, getter) {
   return this;
 });
 //Example: console.log({foo:{bar:{baz:123}}}.$flatten);
-Object.prototype.$property("$flatten", function() {
+Object.prototype.$property("$flatten", function(delimiter) {
   var out = {};
+  if(!delimiter) delimiter = '.';
 
   function r(path, obj) {
     Object.keys(obj).forEach(function(key) {
       var val = obj[key];
 
       if (_.isPlainObject(val))
-        return r((path && path+'.')+key, val);
+        return r((path && path+delimiter)+key, val);
 
-      out[(path && path+'.')+key] = val;
+      out[(path && path+delimiter)+key] = val;
     });
   }
 
@@ -257,3 +258,4 @@ asyncify(Object.prototype, "auto");
     });
   });
 
+console.log({foo:{bar:{baz:123}}}.$flatten('/'));
