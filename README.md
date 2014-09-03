@@ -86,7 +86,8 @@ Helper for `Object.defineProperty` to create a getter with configuration options
 
 ```js
 var x = {}.$getter("foo", "ec", function(){ return 123; });
-console.log(x.foo);```
+console.log(x.foo);
+```
 
 #### options
 A string of flags indicating which options you want enabled. Any options not found in the string are false.
