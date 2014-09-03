@@ -61,6 +61,22 @@ Object.prototype.$property("$get", function(path) {
   while((current = path.shift()) && (val = val[current]));
   return (current===undefined && val) || undefined;
 });
+//sets a deep nested item.
+//Example: console.log({}.$set('foo.bar.baz', 123));
+Object.prototype.$property("$set", function(path, value) {
+  if(typeof path==="string"){
+    path = path.split('.');
+    var obj = this;
+    var last = path.pop();
+
+    path.forEach(function(prop) {
+      if(!_.isPlainObject(obj[prop])) obj[prop] = {};
+      obj = obj[prop];
+    });
+    obj[last] = value;
+  }
+  return this;
+});
 
 String.prototype.$property("$padStart", function (resultLength,padChar) { if(this.length>=resultLength) return this.valueOf(); return (new Array(resultLength-this.length+1)).join(padChar||' ') + this });
 String.prototype.$property("$padEnd", function (resultLength,padChar) { if(this.length>=resultLength) return this.valueOf(); return this+(new Array(resultLength-this.length+1)).join(padChar||' ') });

@@ -118,6 +118,20 @@ console.log({foo:{bar:{baz:123}}}.$get('foo.bar.baz'));
 // 123
 ```
 
+
+### Object.prototype.$set(path, value)
+Sets a nested value of an object using dot notation.
+
+```js
+console.log(
+  {}
+  .$set('foo.bar.baz', 123)
+  .$set('foo.bar.zip', 999)
+  .$set('foo.bam.zip', 523)
+);
+// { foo: { bar: { baz: 123, zip: 999 }, bam: { zip: 523 } } }
+```
+
 ### Object.$type(obj)
 ### Object.prototype.$type(obj)
 See [type-of](https://www.npmjs.org/package/type-of)
