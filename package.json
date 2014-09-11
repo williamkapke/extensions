@@ -1,6 +1,6 @@
 {
   "name": "extensions",
-  "version": "43.3.0",
+  "version": "43.3.1",
   "description": "Doin' freaky nasty things to the built in prototypes.",
   "main": "extensions.js",
   "scripts": {

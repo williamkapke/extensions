@@ -33,14 +33,27 @@ Object.prototype.$property("$getter", function(name, options, getter) {
   });
   return this;
 });
-//Example: console.log({foo:{bar:{baz:123}}}.$flatten);
+
+//Example: console.log({foo:{bar:{baz:123}}}.$flatten());
+
+//Example: (filtering)...
+// function f(path, key, value) { return key === "zzz"? false : "."; }
+// console.log({foo:{bar:{baz:123},zzz:{asdf:123}}}.$flatten(f));
 Object.prototype.$property("$flatten", function(delimiter) {
-  var out = {};
-  if(!delimiter) delimiter = '.';
+  var filter, out = {};
+
+  if(typeof delimiter === "function")
+    filter = delimiter;
+  else if(typeof delimiter === "string")
+    filter = function(){ return delimiter };
+  else
+    filter = function(){ return '.' };
 
   function r(path, obj) {
     Object.keys(obj).forEach(function(key) {
       var val = obj[key];
+      var delimiter = filter(path, key, val);
+      if(delimiter===false) return;
 
       if (_.isPlainObject(val))
         return r((path && path+delimiter)+key, val);
@@ -273,4 +286,5 @@ asyncify(Object.prototype, "auto");
       return _[name].apply(_, args);
     });
   });
+
 
