@@ -199,7 +199,7 @@ var collections = [
 ]
   .forEach(function(name) {
     var fn = _[name];
-    Object.defineProperty(Object.prototype, "w", "$"+name, {
+    Object.defineProperty(Object.prototype, "$"+name, {
       get:function() {
         return fn(this);
       }
