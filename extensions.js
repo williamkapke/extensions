@@ -39,7 +39,7 @@ Object.prototype.$property("$getter", function(name, options, getter) {
 //Example: (filtering)...
 // function f(path, key, value) { return key === "zzz"? false : "."; }
 // console.log({foo:{bar:{baz:123},zzz:{asdf:123}}}.$flatten(f));
-Object.prototype.$property("$flatten", function(delimiter) {
+Object.prototype.$property("$flatten", "w", function(delimiter) {
   var filter, out = {};
 
   if(typeof delimiter === "function")
@@ -67,7 +67,7 @@ Object.prototype.$property("$flatten", function(delimiter) {
 });
 //gets a deep nested item.
 //Example: console.log({foo:{bar:{baz:123}}}.$get('foo.bar.baz'));
-Object.prototype.$property("$get", function(path) {
+Object.prototype.$property("$get", "w", function(path) {
   if(!path) return this;
   path = path.split('.');
   var current, val = this;
@@ -76,7 +76,7 @@ Object.prototype.$property("$get", function(path) {
 });
 //sets a deep nested item.
 //Example: console.log({}.$set('foo.bar.baz', 123));
-Object.prototype.$property("$set", function(path, value) {
+Object.prototype.$property("$set", "w", function(path, value) {
   if(typeof path==="string"){
     path = path.split('.');
     var obj = this;
@@ -91,18 +91,18 @@ Object.prototype.$property("$set", function(path, value) {
   return this;
 });
 
-String.prototype.$property("$padStart", function (resultLength,padChar) { if(this.length>=resultLength) return this.valueOf(); return (new Array(resultLength-this.length+1)).join(padChar||' ') + this });
-String.prototype.$property("$padEnd", function (resultLength,padChar) { if(this.length>=resultLength) return this.valueOf(); return this+(new Array(resultLength-this.length+1)).join(padChar||' ') });
-String.prototype.$property("$endsWith", function (A) { return this.substr(this.length - A.length) === A });
-String.prototype.$property("$startsWith", function (A) { return this.substr(0, A.length) === A });
-String.prototype.$property("$isLongerThan", function (l) { return this.length > l });
-String.prototype.$property("$isShorterThan", function (l) { return this.length < l});
-String.prototype.$property("$lengthIsBetween", function (min,max) { return this.length.isBetween(min, max); });
-String.prototype.$property("$isEmail", function isEmail() { return String.isEmail(this.valueOf()); });
-String.prototype.$property("$remove", function (value) { return this.replace(value, ""); });
-String.prototype.$property("$in", function (values) { return Array.prototype.some.call(Array.isArray(values)? values : arguments, function(i){ return this.valueOf()===i.toString(); }, this) });
-String.prototype.$property("$mask", function () { return this.length && JSON.parse('{"'+this.valueOf().replace(/,/g,'":1,"')+'":1}') || {}; });
-Array.prototype.$property("$mask", function () { var out={}; this.forEach(function(k){out[k]=1}); return out; });
+String.prototype.$property("$padStart", "w", function (resultLength,padChar) { if(this.length>=resultLength) return this.valueOf(); return (new Array(resultLength-this.length+1)).join(padChar||' ') + this });
+String.prototype.$property("$padEnd", "w", function (resultLength,padChar) { if(this.length>=resultLength) return this.valueOf(); return this+(new Array(resultLength-this.length+1)).join(padChar||' ') });
+String.prototype.$property("$endsWith", "w", function (A) { return this.substr(this.length - A.length) === A });
+String.prototype.$property("$startsWith", "w", function (A) { return this.substr(0, A.length) === A });
+String.prototype.$property("$isLongerThan", "w", function (l) { return this.length > l });
+String.prototype.$property("$isShorterThan", "w", function (l) { return this.length < l});
+String.prototype.$property("$lengthIsBetween", "w", function (min,max) { return this.length.isBetween(min, max); });
+String.prototype.$property("$isEmail", "w", function isEmail() { return String.isEmail(this.valueOf()); });
+String.prototype.$property("$remove", "w", function (value) { return this.replace(value, ""); });
+String.prototype.$property("$in", "w", function (values) { return Array.prototype.some.call(Array.isArray(values)? values : arguments, function(i){ return this.valueOf()===i.toString(); }, this) });
+String.prototype.$property("$mask", "w", function () { return this.length && JSON.parse('{"'+this.valueOf().replace(/,/g,'":1,"')+'":1}') || {}; });
+Array.prototype.$property("$mask", "w", function () { var out={}; this.forEach(function(k){out[k]=1}); return out; });
 
 String.$isEmail = function(str) {
   //I have no idea who deserves the credit for this RegExp.
@@ -124,14 +124,14 @@ Date.$midnightUTC = function(date){
 Date.$nowISO = function(){
   return (new Date()).toISOString();
 }
-Date.prototype.$property("$midnight", function(){ return Date.midnight(this); });
-Date.prototype.$property("$midnightUTC", function(){ return Date.midnightUTC(this); });
-Date.prototype.$property("$addDays", function(value){ this.setDate(this.getDate() + value); return this; });
+Date.prototype.$property("$midnight", "w", function(){ return Date.midnight(this); });
+Date.prototype.$property("$midnightUTC", "w", function(){ return Date.midnightUTC(this); });
+Date.prototype.$property("$addDays", "w", function(value){ this.setDate(this.getDate() + value); return this; });
 
 
-Number.prototype.$property("$isBetween", function (min,max) { return this >= min && this <= max; });
+Number.prototype.$property("$isBetween", "w", function (min,max) { return this >= min && this <= max; });
 
-Object.$property("$type", type);
+Object.$property("$type", "w", type);
 Object.prototype.$getter("$json", function() { return JSON.stringify(this); });
 Object.prototype.$getter("$json2", function() { return JSON.stringify(this, null, 2); });
 Object.prototype.$getter("$type", function() { return Object.$type(this); });
@@ -143,7 +143,7 @@ Object.prototype.$getter("$signature", function() {
 var slice = Array.prototype.slice;
 function lodashify(destination, name) {
   var fn = _[name];
-  destination.$property("$"+name, function() {
+  destination.$property("$"+name, "w", function() {
     var args = slice.bind(arguments)();
     args.unshift(this);
     return fn.apply(_, args);
@@ -199,7 +199,7 @@ var collections = [
 ]
   .forEach(function(name) {
     var fn = _[name];
-    Object.defineProperty(Object.prototype, "$"+name, {
+    Object.defineProperty(Object.prototype, "w", "$"+name, {
       get:function() {
         return fn(this);
       }
@@ -210,7 +210,7 @@ var collections = [
 //asyncify
 function asyncify(destination, name) {
   var fn = async[name];
-  destination.$property("$"+name, function() {
+  destination.$property("$"+name, "w", function() {
     var args = slice.bind(arguments)();
     args.unshift(this);
     return fn.apply(async, args);
@@ -254,7 +254,7 @@ asyncify(Object.prototype, "auto");
     lodashify(Object.prototype, name);
     lodashify(String.prototype, name);
 
-    Array.prototype.$property("$"+name, function(a,b) {
+    Array.prototype.$property("$"+name, "w", function(a,b) {
       var args = slice.bind(arguments)();
       args.unshift(this);
 
@@ -275,7 +275,7 @@ asyncify(Object.prototype, "auto");
     lodashify(Object.prototype, name);
     lodashify(String.prototype, name);
 
-    Array.prototype.$property("$"+name, function(memo,a,b) {
+    Array.prototype.$property("$"+name, "w", function(memo,a,b) {
       var args = slice.bind(arguments)();
       args.unshift(this);
 
