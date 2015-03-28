@@ -1,6 +1,6 @@
 var _ = $_ = require('lodash');
 var async = $async = require("async");
-var type = require("type-of");
+var type = require("component-type");
 
 // Example: ({}).$property("foo", "ewc", 123);
 Object.defineProperty(Object.prototype, "$property", {

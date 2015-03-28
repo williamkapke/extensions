@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "async": "^0.9.0",
-    "lodash": "^2.4.1",
-    "type-of": "^2.0.1"
+    "component-type": "^1.1.0",
+    "lodash": "^2.4.1"
   }
 }
