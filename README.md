@@ -2,15 +2,14 @@ Javascript prototype extensions
 ===============================
 
 The power of [lodash](http://lodash.com/), [async](https://github.com/caolan/async),
-[type-of](https://www.npmjs.org/package/type-of), PLUS a few other useful helpers
+[component-type](https://www.npmjs.org/package/component-type), PLUS a few other useful helpers
 conveniently placed on the prototypes of the built in Javascript Objects.
 
 To avoid collisions with other prototype augmentations you may have, `extensions` prefixes
 everything with `$`.
 
 ```js
-//use async series (https://github.com/caolan/async#seriestasks-callback)
-var log = function(t){ return function()console.log(t) };
+//example of async series (https://github.com/caolan/async#seriestasks-callback)
 [
 	function(cb){ console.log('one'); cb(); },
 	function(cb){ console.log('two'); cb(); },
@@ -55,7 +54,7 @@ functions have been available as possible. For access to the entire frameworks, 
 use $async and $_ respectively.
 
 For a full list, check out the source:<br>
-https://github.com/williamwicks/extensions/blob/master/extensions.js#L123
+https://github.com/williamkapke/extensions/blob/master/extensions.js#L123
 <br>
 <br>
 
@@ -162,7 +161,7 @@ console.log( fn(/jazz/, new Date) );
 
 Use it like this:
 ```js
-function(){
+function connect(){
 	switch(arguments.$signature){
 		case "number,boolean,function":
 			return foo.apply(this, arguments);
@@ -194,7 +193,7 @@ If you want to add `n` number of characters to a string, do this:
 ```javascript
 //add 3 zeros to the beginning
 var x = "EasyPeezy";
-console.log(x.padStart(x.length+3, '0'));
+console.log(x.$padStart(x.length+3, '0'));
 //000EasyPeezy
 ```
 ### String.prototype.$endsWith(string)
