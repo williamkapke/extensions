@@ -1,6 +1,6 @@
 {
   "name": "extensions",
-  "version": "43.3.5",
+  "version": "4.0.0",
   "description": "Doin' freaky nasty things to the built in prototypes.",
   "main": "extensions.js",
   "scripts": {
@@ -38,8 +38,7 @@
     "url": "https://github.com/williamkapke/extensions/issues"
   },
   "dependencies": {
-    "async": "^0.9.0",
     "component-type": "^1.1.0",
-    "lodash": "^2.4.1"
+    "lodash": ">=3.0.0 <5"
   }
 }

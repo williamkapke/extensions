@@ -1,32 +1,45 @@
 Javascript prototype extensions
 ===============================
 
-The power of [lodash](http://lodash.com/), [async](https://github.com/caolan/async),
-[component-type](https://www.npmjs.org/package/component-type), PLUS a few other useful helpers
-conveniently placed on the prototypes of the built in Javascript Objects.
+The power of [lodash](http://lodash.com/), [component-type](https://www.npmjs.org/package/component-type) and 
+couple other useful helpers conveniently **placed on the prototypes** of the built in Javascript Objects.
 
 To avoid collisions with other prototype augmentations you may have, `extensions` prefixes
 everything with `$`.
+<br>
+<br>
 
-```js
-//example of async series (https://github.com/caolan/async#seriestasks-callback)
-[
-	function(cb){ console.log('one'); cb(); },
-	function(cb){ console.log('two'); cb(); },
-	function(cb){ console.log('three'); cb(); }
-]
-.$series(function(){
-	console.log('done!');
-});
+### TLDR;
+Most of [lodash](http://lodash.com/)'s function send the subject object as the first parameter so you just do this...
 
 ```
+npm install extensions
+```
+... then write code
+```javascript
+require("extensions")
 
->  Do not open an issue saying that augmenting prototypes is bad. I'm a big boy that
->  can ride my bike without training wheels now and I'm going to go have fun.
->
->  If something you read 10 years ago has still got you are scared of augmenting the
->  `prototype` of the `String`,`Object`,`Number`, and `Date` objects then do not use
->  this module.
+//write code
+mything.$<lodash_fn>(...args)
+```
+<br>
+<br>
+<br>
+Your object|array|string|function will get injected as the 1st parameter.
+
+![Just swap the first argument!](http://williamkapke.github.io/extensions/extensions.gif)
+
+
+<br>
+<br>
+
+#### Dear fearful ones...
+Do not open an issue saying that augmenting prototypes is bad. I'm a big boy that
+can ride my bike without training wheels now and I'm going to go have fun.
+
+If something you read 10 years ago has still got you are scared of augmenting the
+`prototype` of the `String`,`Object`,`Number`, and `Date` objects then do not use
+this module.
 
 Everything uses `Object.defineProperty` (introduced in ECMAScript 5) with
 `enumerable:false`.
@@ -34,39 +47,26 @@ Everything uses `Object.defineProperty` (introduced in ECMAScript 5) with
 This is NOT a crazy big lib. Seriously- open `extensions.js` and see for yourself.
 <br>
 <br>
-<br>
-```
-npm install extensions
-```
 
-#### FYI...
-This module does not exporting anything. It just needs to be `require`'d somewhere.
-```javascript
-//app.js
 
-require("extensions")
-
-```
-
-# async & lodash
-As many of the [async](https://github.com/caolan/async) & [lodash](http://lodash.com/)
-functions have been available as possible. For access to the entire frameworks, you can
-use $async and $_ respectively.
+# lodash
+As many of the [lodash](http://lodash.com/) functions have been made available as possible. For access to the entire [lodash](http://lodash.com/) framework, you can
+use `GLOBAL.$_`.
 
 For a full list, check out the source:<br>
-https://github.com/williamkapke/extensions/blob/master/extensions.js#L123
+https://github.com/williamkapke/extensions/blob/master/extensions.js
 <br>
 <br>
 
 
 
-#Object Extensions
-
-### Object.prototype.$property(name, options, value)
+# Additional Extensions
+## Object
+### Object.prototype.$define(name, options, value)
 Helper for `Object.defineProperty` to set a property value with configuration options.
 
 ```js
-var x = {}.$property("foo", "ecw", 123);
+var x = {}.$define("foo", "ecw", 123);
 console.log(x.foo);
 ```
 
@@ -109,28 +109,6 @@ console.log({foo:{bar:{baz:123}}}.$flatten());
 ```
 
 
-### Object.prototype.$get(path)
-Gets a nested value from an object using dot notation.
-
-```js
-console.log({foo:{bar:{baz:123}}}.$get('foo.bar.baz'));
-// 123
-```
-
-
-### Object.prototype.$set(path, value)
-Sets a nested value of an object using dot notation.
-
-```js
-console.log(
-  {}
-  .$set('foo.bar.baz', 123)
-  .$set('foo.bar.zip', 999)
-  .$set('foo.bam.zip', 523)
-);
-// { foo: { bar: { baz: 123, zip: 999 }, bam: { zip: 523 } } }
-```
-
 ### Object.$type(obj)
 ### Object.prototype.$type(obj)
 See [type-of](https://www.npmjs.org/package/type-of)
@@ -145,9 +123,9 @@ Shortcut for `JSON.stringify(obj, null, 2)`
 Although this is on `Object.prototype`, it explicitly only works on an `arguments` Object.
 
 ```js
-var fn = function(){ console.log(arguments.$signature) };
-
-var fn = function(){ return arguments.$signature };
+function fn(){
+  return arguments.$signature
+};
 
 console.log( fn(1, true, function(){}) );
 //number,boolean,function
@@ -182,32 +160,7 @@ function connect(){
 
 
 
-# String Extensions
-
-### String.prototype.$padStart(length [,padchar])
-### String.prototype.$padEnd(length [,padchar])
-Adds characters to the beginning or end of the `String`.
-**length** is the total length you want the resulting string to be.
-
-If you want to add `n` number of characters to a string, do this:
-```javascript
-//add 3 zeros to the beginning
-var x = "EasyPeezy";
-console.log(x.$padStart(x.length+3, '0'));
-//000EasyPeezy
-```
-### String.prototype.$endsWith(string)
-### String.prototype.$startsWith(string)
-It does what you think it does.
-
-### String.prototype.$isLongerThan(length)
-### String.prototype.$isShorterThan(length)
-### String.prototype.$lengthIsBetween(min,max)
-Test the length of the `String`.
-
-### String.$isEmail(str)
-### String.prototype.$isEmail()
-Tests if it matches a big long email `RegExp`.
+## String
 
 ### String.prototype.$remove(string|regex)
 This is an alias for:
@@ -215,17 +168,8 @@ This is an alias for:
 var x = "The Quick Brown".replace(value, '');
 ```
 
-### String.prototype.$in(array|args)
-Test if the `String` is in the array/arguments.
-```javascript
-var x = "99".in([1,5,33,77,99,32425]);
-//true
-var x = "dog".in("cat", "pig", "horse", "dog", "cow");
-//true
-```
-
-### String.prototype.$mask()
-Converts a comma separated list of property names to a field mask. (Useful for mongo)
+### String.prototype.$mask([delimiter=','])
+Converts a delimited list of property names to a field mask. (Useful for mongo)
 ```js
 console.log("foo,bar,baz".$mask())
 // { foo: 1, bar: 1, baz: 1 }
@@ -237,7 +181,7 @@ console.log("foo,bar,baz".$mask())
 
 
 
-#Array Extensions
+## Array
 
 ### Array.prototype.$mask()
 Converts an Array of property names to a field mask. (Useful for mongo)
@@ -251,7 +195,7 @@ console.log(["foo","bar","baz"].$mask())
 
 
 
-# Date Extensions
+## Date
 
 ### Date.$midnight([date])
 Returns a new `Date` object that is set to midnight of `date`.
@@ -274,7 +218,7 @@ Adds `num` days to the date.
 
 
 
-# Number Extensions
+## Number
 
 ### Number.prototype.$isBetween(min,max)
 `min` and `max` are _inclusive_. Just like if you say "Pick a number between 1 and 100."
