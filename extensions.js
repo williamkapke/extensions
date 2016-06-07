@@ -1,8 +1,11 @@
-var _ = $_ = require('lodash');
+var pre = process.env.EXTENSIONS_PREFIX || GLOBAL.EXTENSIONS_PREFIX;
+if(!pre || typeof pre !== 'string') pre = '$';
+
+var _ = GLOBAL[pre+'_'] = require('lodash');
 var type = require("component-type");
 
 // Example: ({}).$define("foo", "ewc", 123);
-Object.defineProperty(Object.prototype, "$define", {
+Object.defineProperty(Object.prototype, pre+"define", {
   value: function(name, options, value) {
     value = arguments[arguments.length-1];
     if(options===value) options = "";
@@ -19,7 +22,7 @@ Object.defineProperty(Object.prototype, "$define", {
     return this;
   }
 });
-Object.prototype.$define("$getter", function(name, options, getter) {
+Object.prototype[pre+'define'](pre+"getter", function(name, options, getter) {
   getter = arguments[arguments.length-1];
   if(options===getter) options = "";
 
@@ -38,7 +41,7 @@ Object.prototype.$define("$getter", function(name, options, getter) {
 //Example: (filtering)...
 // function f(path, key, value) { return key === "zzz"? false : "."; }
 // console.log({foo:{bar:{baz:123},zzz:{asdf:123}}}.$flatten(f));
-Object.prototype.$define("$flatten", "w", function(delimiter) {
+Object.prototype[pre+'define'](pre+"flatten", "w", function(delimiter) {
   var filter, out = {};
 
   if(typeof delimiter === "function")
@@ -65,38 +68,38 @@ Object.prototype.$define("$flatten", "w", function(delimiter) {
   return out;
 });
 
-String.prototype.$define("$remove", "w", function (value) { return this.replace(value, ""); });
-String.prototype.$define("$mask", "w", function (d) { return this.split(d||',').$mask() });
-Array.prototype.$define("$mask", "w", function () { var out={}; this.forEach(function(k){out[k]=1}); return out; });
+String.prototype[pre+'define'](pre+"remove", "w", function (value) { return this.replace(value, ""); });
+String.prototype[pre+'define'](pre+"mask", "w", function (d) { return this.split(d||',')[pre+'mask']() });
+Array.prototype[pre+'define'](pre+"mask", "w", function () { var out={}; this.forEach(function(k){out[k]=1}); return out; });
 
 
 
-Date.$midnight = function(date){
+Date[pre+'midnight'] = function(date){
   date = date? new Date(date) : new Date;
   date.setHours(0,0,0,0);
   return date;
 };
-Date.$midnightUTC = function(date){
+Date[pre+'midnightUTC'] = function(date){
   if(!date) date = new Date;
   var val = date.valueOf();
   return val - (val % 86400000);
 };
-Date.$nowISO = function(){
+Date[pre+'nowISO'] = function(){
   return (new Date()).toISOString();
 };
-Date.prototype.$define("$midnight", "w", function(){ return Date.$midnight(this); });
-Date.prototype.$define("$midnightUTC", "w", function(){ return Date.$midnightUTC(this); });
-Date.prototype.$define("$addDays", "w", function(value){ this.setDate(this.getDate() + value); return this; });
+Date.prototype[pre+'define'](pre+"midnight", "w", function(){ return Date[pre+'midnight'](this); });
+Date.prototype[pre+'define'](pre+"midnightUTC", "w", function(){ return Date[pre+'midnightUTC'](this); });
+Date.prototype[pre+'define'](pre+"addDays", "w", function(value){ this.setDate(this.getDate() + value); return this; });
 
 
-Number.prototype.$define("$isBetween", "w", function (min,max) { return this >= min && this <= max; });
+Number.prototype[pre+'define'](pre+"isBetween", "w", function (min,max) { return this >= min && this <= max; });
 
-Object.$define("$type", "w", type);
-Object.prototype.$getter("$json", function() { return JSON.stringify(this); });
-Object.prototype.$getter("$json2", function() { return JSON.stringify(this, null, 2); });
-Object.prototype.$getter("$type", function() { return Object.$type(this); });
-Object.prototype.$getter("$signature", function() {
-  return this.$isArguments && Array.prototype.map.call(this, Object.$type).join();
+Object[pre+'define'](pre+"type", "w", type);
+Object.prototype[pre+'getter'](pre+"json", function() { return JSON.stringify(this); });
+Object.prototype[pre+'getter'](pre+"json2", function() { return JSON.stringify(this, null, 2); });
+Object.prototype[pre+'getter'](pre+"type", function() { return Object[pre+'type'](this); });
+Object.prototype[pre+'getter'](pre+"signature", function() {
+  return this[pre+'isArguments'] && Array.prototype.map.call(this, Object[pre+'type']).join();
 });
 
 
@@ -110,7 +113,7 @@ var slice = Array.prototype.slice;
 function lodashify(destination, name) {
   var fn = _[name];
   if(!fn) return;// console.log('skipped', name);//ignore features that do not exist in the installed version
-  destination.$define("$"+name, "w", function() {
+  destination[pre+'define'](pre+name, "w", function() {
     var args = slice.bind(arguments)();
     args.unshift(this);
     return fn.apply(_, args);
@@ -172,7 +175,7 @@ function lodashify(destination, name) {
 .forEach(function(name) {
   var fn = _[name];
   if(!fn) return;//ignore features that do not exist in the installed version
-  Object.defineProperty(Object.prototype, "$"+name, {
+  Object.defineProperty(Object.prototype, pre+name, {
     get:function() {
       return fn(this);
     }

@@ -5,7 +5,8 @@ The power of [lodash](http://lodash.com/), [component-type](https://www.npmjs.or
 couple other useful helpers conveniently **placed on the prototypes** of the built in Javascript Objects.
 
 To avoid collisions with other prototype augmentations you may have, `extensions` prefixes
-everything with `$`.
+everything with `$`. If `$` doesn't work for you, use the `EXTENSIONS_PREFIX` environment or GLOBAL variable 
+to choose a different one!
 <br>
 <br>
 
