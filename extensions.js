@@ -1,7 +1,7 @@
-var pre = process.env.EXTENSIONS_PREFIX || GLOBAL.EXTENSIONS_PREFIX;
+var pre = process.env.EXTENSIONS_PREFIX || global.EXTENSIONS_PREFIX;
 if(!pre || typeof pre !== 'string') pre = '$';
 
-var _ = GLOBAL[pre+'_'] = require('lodash');
+var _ = global[pre+'_'] = require('lodash');
 var type = require("component-type");
 
 // Example: ({}).$define("foo", "ewc", 123);
