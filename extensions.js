@@ -4,6 +4,9 @@ if(!pre || typeof pre !== 'string') pre = '$';
 var _ = global[pre+'_'] = require('lodash');
 var type = require("component-type");
 
+// avoid double initialization
+if (Object.prototype[pre+"define"]) return;
+
 // Example: ({}).$define("foo", "ewc", 123);
 Object.defineProperty(Object.prototype, pre+"define", {
   value: function(name, options, value) {
